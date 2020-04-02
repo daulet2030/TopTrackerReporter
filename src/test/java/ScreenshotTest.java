@@ -87,7 +87,7 @@ public class ScreenshotTest {
                 .log().body()
                 .post("files.upload")
                 .then()
-                .log().all();
+                .log().body();
     }
 
     private void scrollToBottom() {
