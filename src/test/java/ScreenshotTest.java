@@ -37,7 +37,7 @@ public class ScreenshotTest {
         options.addArguments("--headless", "--disable-gpu", "--window-size=1400,2400"); //width, height
         driver = new ChromeDriver(options);
         driver.manage().window().maximize();
-        wait = new WebDriverWait(driver, 10);
+        wait = new WebDriverWait(driver, 30);
         this.username = username;
         this.password = password;
         this.token = token;
