@@ -25,13 +25,14 @@ public class ScreenshotTest {
     private String screenShotPath = System.getProperty("user.dir") + "/target/screenshot.png";
     private WebDriverWait wait;
     private String token;
+    private String userId;
     private String channel;
     private String username;
     private String password;
 
-    @Parameters({"username", "password", "token", "channel"})
+    @Parameters({"username", "password", "token", "userId", "channel"})
     @BeforeClass
-    public void init(String username, String password, String token, String channel) {
+    public void init(String username, String password, String token, String userId, String channel) {
         ChromeDriverManager.chromedriver().setup();
         ChromeOptions options = new ChromeOptions();
         options.addArguments("--headless", "--disable-gpu", "--window-size=1400,2400"); //width, height
@@ -41,6 +42,7 @@ public class ScreenshotTest {
         this.username = username;
         this.password = password;
         this.token = token;
+        this.userId = userId;
         this.channel = channel;
     }
 
@@ -50,7 +52,8 @@ public class ScreenshotTest {
         WebElement table = getReportTable();
         scrollToBottom();
         takeScreenshot(table, screenShotPath);
-        sendScreenShotToSlackChannel(screenShotPath);
+        sendScreenShotToRocketChannel(screenShotPath);
+//      sendScreenShotToSlackChannel(screenShotPath);
     }
 
     private WebElement getReportTable() {
@@ -89,6 +92,20 @@ public class ScreenshotTest {
                 .then()
                 .log().body();
     }
+
+    private void sendScreenShotToRocketChannel(String screenShotPath) {
+        RestAssured.baseURI = "https://chat.mersys.io/api/v1";
+        RestAssured.given()
+                .header(new Header("X-Auth-Token", token))
+                .header(new Header("X-User-Id", userId))
+                .multiPart("file", new File(screenShotPath), "image/png")
+                .when()
+                .log().body()
+                .post("rooms.upload/" + channel) // Channel ID or Channel Name
+                .then()
+                .log().body();
+    }
+
 
     private void scrollToBottom() {
         Actions actions = new Actions(driver);
