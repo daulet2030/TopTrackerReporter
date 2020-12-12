@@ -26,13 +26,14 @@ public class ScreenshotTest {
     private WebDriverWait wait;
     private String token;
     private String userId;
+    private String channelId;
     private String channel;
     private String username;
     private String password;
 
-    @Parameters({"username", "password", "token", "userId", "channel"})
+    @Parameters({"username", "password", "token", "userId", "channelId", "channel"})
     @BeforeClass
-    public void init(String username, String password, String token, String userId, String channel) {
+    public void init(String username, String password, String token, String userId, String channelId, String channel) {
         ChromeDriverManager.chromedriver().setup();
         ChromeOptions options = new ChromeOptions();
         options.addArguments("--headless", "--disable-gpu", "--window-size=1400,2400"); //width, height
@@ -43,6 +44,7 @@ public class ScreenshotTest {
         this.password = password;
         this.token = token;
         this.userId = userId;
+        this.channelId = channelId;
         this.channel = channel;
     }
 
@@ -101,7 +103,7 @@ public class ScreenshotTest {
                 .multiPart("file", new File(screenShotPath), "image/png")
                 .when()
                 .log().body()
-                .post("rooms.upload/" + channel) // Channel ID or Channel Name
+                .post("rooms.upload/" + channelId) // Channel ID or Channel Name
                 .then()
                 .log().body();
     }
