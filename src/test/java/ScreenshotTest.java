@@ -36,7 +36,8 @@ public class ScreenshotTest {
     public void init(String username, String password, String token, String userId, String channelId, String channel) {
         ChromeDriverManager.chromedriver().setup();
         ChromeOptions options = new ChromeOptions();
-        options.addArguments("--headless", "--disable-gpu", "--window-size=1400,2400"); //width, height
+//        --disable-gpu removed
+        options.addArguments("--headless", "--window-size=1400,2400"); //width, height
         driver = new ChromeDriver(options);
         driver.manage().window().maximize();
         wait = new WebDriverWait(driver, 30);
@@ -54,7 +55,7 @@ public class ScreenshotTest {
         WebElement table = getReportTable();
         scrollToBottom();
         takeScreenshot(table, screenShotPath);
-        sendScreenShotToRocketChannel(screenShotPath);
+//      sendScreenShotToRocketChannel(screenShotPath);
 //      sendScreenShotToSlackChannel(screenShotPath);
     }
 
@@ -107,7 +108,6 @@ public class ScreenshotTest {
                 .then()
                 .log().body();
     }
-
 
     private void scrollToBottom() {
         Actions actions = new Actions(driver);
