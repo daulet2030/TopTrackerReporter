@@ -4,6 +4,6 @@ Report creator for https://tracker.toptal.com. It will take a screenshot of curr
  `mvn test -Dusername=<topTrackerUsername> 
            -Dpassword=<topTrackerPassword> 
            -Dchannel=<#slackChannel>
-           -DchannelId<rocketChannelId>
-           -DuserId<rocketuserId>
+           -DchannelId=<rocketChannelId>
+           -DuserId=<rocketuserId>
            -Dtoken=<slackUserToken>`
