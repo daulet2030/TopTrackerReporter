@@ -54,7 +54,7 @@ public class ScreenshotTest {
         WebElement table = getReportTable();
         scrollToBottom();
         takeScreenshot(table, screenShotPath);
-//      sendScreenShotToRocketChannel(screenShotPath);
+        sendScreenShotToRocketChannel(screenShotPath);
 //      sendScreenShotToSlackChannel(screenShotPath);
     }
 
