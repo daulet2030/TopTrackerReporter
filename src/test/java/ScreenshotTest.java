@@ -35,6 +35,7 @@ public class ScreenshotTest {
     @BeforeClass
     public void init(String username, String password, String token, String userId, String channelId, String channel) {
 //      ChromeDriverManager.chromedriver().setup();
+//      add chromedriver PATH
         ChromeOptions options = new ChromeOptions();
         options.addArguments("--headless", "--no-sandbox", "--disable-dev-shm-usage", "--disable-gpu", "--window-size=1400,2400"); //width, height
         driver = new ChromeDriver(options);
@@ -76,7 +77,7 @@ public class ScreenshotTest {
         LocalDate now = LocalDate.now();
         DayOfWeek firstDayOfWeek = DayOfWeek.MONDAY;
         LocalDate startOfCurrentWeek = now.with(TemporalAdjusters.previousOrSame(firstDayOfWeek));
-        DayOfWeek lastDayOfWeek = firstDayOfWeek.plus(4); // or minus(1)
+        DayOfWeek lastDayOfWeek = firstDayOfWeek.plus(-1); // or plus(4)
         LocalDate endOfWeek = now.with(TemporalAdjusters.nextOrSame(lastDayOfWeek));
         return "https://tracker.toptal.com/app/reports?start=" + startOfCurrentWeek + "&end=" + endOfWeek + "&workers=all&projects=latest&chart=projects&table=timesheet&grouping=workers";
     }
