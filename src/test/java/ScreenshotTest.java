@@ -25,22 +25,27 @@ public class ScreenshotTest {
     private String screenShotPath = System.getProperty("user.dir") + "/target/screenshot.png";
     private WebDriverWait wait;
     private String token;
+    private String userId;
+    private String channelId;
     private String channel;
     private String username;
     private String password;
 
-    @Parameters({"username", "password", "token", "channel"})
+    @Parameters({"username", "password", "token", "userId", "channelId", "channel"})
     @BeforeClass
-    public void init(String username, String password, String token, String channel) {
-        ChromeDriverManager.chromedriver().setup();
+    public void init(String username, String password, String token, String userId, String channelId, String channel) {
+//      ChromeDriverManager.chromedriver().setup();
+//      add chromedriver PATH
         ChromeOptions options = new ChromeOptions();
-        options.addArguments("--headless", "--disable-gpu", "--window-size=1400,2400"); //width, height
+        options.addArguments("--headless", "--no-sandbox", "--disable-dev-shm-usage", "--disable-gpu", "--window-size=1400,2400"); //width, height
         driver = new ChromeDriver(options);
         driver.manage().window().maximize();
         wait = new WebDriverWait(driver, 30);
         this.username = username;
         this.password = password;
         this.token = token;
+        this.userId = userId;
+        this.channelId = channelId;
         this.channel = channel;
     }
 
@@ -50,7 +55,8 @@ public class ScreenshotTest {
         WebElement table = getReportTable();
         scrollToBottom();
         takeScreenshot(table, screenShotPath);
-        sendScreenShotToSlackChannel(screenShotPath);
+        sendScreenShotToRocketChannel(screenShotPath);
+//      sendScreenShotToSlackChannel(screenShotPath);
     }
 
     private WebElement getReportTable() {
@@ -71,7 +77,7 @@ public class ScreenshotTest {
         LocalDate now = LocalDate.now();
         DayOfWeek firstDayOfWeek = DayOfWeek.MONDAY;
         LocalDate startOfCurrentWeek = now.with(TemporalAdjusters.previousOrSame(firstDayOfWeek));
-        DayOfWeek lastDayOfWeek = firstDayOfWeek.plus(4); // or minus(1)
+        DayOfWeek lastDayOfWeek = firstDayOfWeek.plus(-1); // or plus(4)
         LocalDate endOfWeek = now.with(TemporalAdjusters.nextOrSame(lastDayOfWeek));
         return "https://tracker.toptal.com/app/reports?start=" + startOfCurrentWeek + "&end=" + endOfWeek + "&workers=all&projects=latest&chart=projects&table=timesheet&grouping=workers";
     }
@@ -86,6 +92,19 @@ public class ScreenshotTest {
                 .when()
                 .log().body()
                 .post("files.upload")
+                .then()
+                .log().body();
+    }
+
+    private void sendScreenShotToRocketChannel(String screenShotPath) {
+        RestAssured.baseURI = "https://chat.mersys.io/api/v1";
+        RestAssured.given()
+                .header(new Header("X-Auth-Token", token))
+                .header(new Header("X-User-Id", userId))
+                .multiPart("file", new File(screenShotPath), "image/png")
+                .when()
+                .log().body()
+                .post("rooms.upload/" + channelId) // Channel ID or Channel Name
                 .then()
                 .log().body();
     }

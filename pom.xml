@@ -16,6 +16,8 @@
         <password>[toptracker-password]</password>
         <channel>[#your-slack-channel]</channel>
         <token>[slack-legacy-token]</token>
+        <userId>[rocket-user-Id]</userId>
+        <channelId>[rocket-channel-Id]</channelId>
     </properties>
 
     <dependencies>
@@ -55,6 +57,8 @@
                         <password>${password}</password>
                         <channel>${channel}</channel>
                         <token>${token}</token>
+                        <userId>${userId}</userId>
+                        <channelId>${channelId}</channelId>
                     </systemPropertyVariables>
                 </configuration>
             </plugin>
