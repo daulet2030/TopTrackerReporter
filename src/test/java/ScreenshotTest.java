@@ -1,4 +1,4 @@
-//import io.github.bonigarcia.wdm.ChromeDriverManager;
+import io.github.bonigarcia.wdm.ChromeDriverManager;
 
 import io.restassured.RestAssured;
 import io.restassured.http.Header;
@@ -34,8 +34,7 @@ public class ScreenshotTest {
     @Parameters({"username", "password", "token", "userId", "channelId", "channel"})
     @BeforeClass
     public void init(String username, String password, String token, String userId, String channelId, String channel) {
-//      ChromeDriverManager.chromedriver().setup();
-//      add chromedriver PATH
+        ChromeDriverManager.chromedriver().setup();
         ChromeOptions options = new ChromeOptions();
         options.addArguments("--headless", "--no-sandbox", "--disable-dev-shm-usage", "--disable-gpu", "--window-size=1400,2400"); //width, height
         driver = new ChromeDriver(options);
@@ -55,8 +54,12 @@ public class ScreenshotTest {
         WebElement table = getReportTable();
         scrollToBottom();
         takeScreenshot(table, screenShotPath);
-        sendScreenShotToRocketChannel(screenShotPath);
-//      sendScreenShotToSlackChannel(screenShotPath);
+        if(!channelId.isEmpty()) {
+            sendScreenShotToRocketChannel(screenShotPath);
+        }
+        if(!channel.isEmpty()) {
+            sendScreenShotToSlackChannel(screenShotPath);
+        }
     }
 
     private WebElement getReportTable() {
