@@ -1,5 +1,6 @@
 # TopTrackerReporter
 Report creator for https://tracker.toptal.com. It will take a screenshot of current week report and send to a slack channel or rocket channel.
+
 TO RUN for slack: 
  `mvn test -Dusername=<topTrackerUsername> 
            -Dpassword=<topTrackerPassword> 
